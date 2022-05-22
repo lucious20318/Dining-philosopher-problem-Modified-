@@ -1,0 +1,25 @@
+A deadlock occurs when none of the philosophers are able to eat because all of them are only able to access only 1 fork. 
+
+For the first part of the question I have labelled the file as quest1.c , the question only asks us to solve the deadlock situation when five philosophers are sitting around a table 
+and need two forks to eat. 
+We first globally define some variables including a counting semaphore "sem" and a binary semaphore array sem_arr[5] so that they are visible to all the threads. In the main function 
+we initialize an array of 5 processes using pthread_t for each one of the philosophers. Then we use sem_init with the semaphore at address sem and the pshared value as 0 so 
+that the semaphore is shared between the processes. If the sem_val is not equal to -1 then we proceed with the further code. 
+We initialize 5 more unnamed semaphores with each semaphore in the semaphore array.
+After initializing we create threads for each philosopher and call the function phil_id which then calls the function take_leave function which tells us which philosopher is hungry 
+and then tells us the index of the fork used using the function eat. We use sem_post to increment the semaphore's count and if it consequently becomes greater than 0, then it itself 
+unlocks another process blocked in the sem_wait. We use sleep to check whether the philosopher who is currently eating does not interfere with another philosopher. Sleep stops another 
+process from interfering with the current process. Then we use sem_wait on the current semaphore to overcome the deadlock situation. It blocks the calling thread until the semaphore 
+count becomes more than 0. 
+Then we use sem_wait on the semaphore sem to block it after which it prints the philosopher putting the forks down and proceeds back to thinking. 
+After this we increment the count of sem by using sem_post. The pthread_join will give an error if two threads try to join with each other which creates a deadlock. 
+If it is successful then the thread has successfuly terminated. 
+All this goes on until we terminate the program manually. 
+
+For the second part there no deadlock will be encountered so the code remains the same only the conditions include a bowl and only 1 fork to use. At most 4 philosophers 
+would be able to eat simultaneously that's why no deadlock situation will be encountered. Apart from the code mentioned in the first part two extra functions bowl and cur_pos are declared. 
+The bowl function is used to return the index of the bowl that the philosopher is going to use and the cur_pos function is used to return the current index of the bowl that 
+the philosopher was using.
+
+For the third part there will be a deadlock situation. The code for this part is similar to the second part only the conditions for eating are 
+changed i.e the forks on the left and right of the philosopher should be available and the sauce bowl too. Rest is similar. 
